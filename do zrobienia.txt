@@ -1,0 +1,4 @@
+- github
+- deploy
+--------
+sprzątanie kodu - w tym scoped styles i konsola przy pierwszym ładowaniu
