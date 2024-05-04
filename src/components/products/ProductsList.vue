@@ -1,6 +1,6 @@
 <template>
   <card>
-    <template v-slot:title>List of products:</template>
+    <template v-if="!isLoading" v-slot:title>List of products:</template>
     <template v-slot:content>
       <div v-if="!isLoading">
       <base-table
@@ -10,7 +10,7 @@
       ></base-table>
       <pagination></pagination>
     </div>
-    <div v-if="isLoading">
+    <div v-if="isLoading" class="loadingSpinner">
   <progress-spinner strokeWidth="5"></progress-spinner>
     </div>
     </template>
@@ -74,14 +74,16 @@ card {
   max-width: 100vw;
 }
 
+.loadingSpinner{
+  width: 20vw;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+}
+
 .details p {
   margin: 0.2em;
 }
-
-/* .details{
-  display: flex;
-  justify-content: center;
-} */
 
 h3 {
   text-align: center;
