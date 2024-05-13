@@ -52,8 +52,8 @@ i {
 }
 
 .pagination {
-  margin-top: 10px;
-  margin-bottom: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 p {

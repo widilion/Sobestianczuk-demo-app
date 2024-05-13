@@ -75,23 +75,25 @@ function rowClick(rowId: String | Number) {
 <style scoped>
 @media all and (min-width: 1080px) {
   #table {
-    font-size: 1.5vw;
+    font-size: 1.3em 
   }
-  #staticTable {
-    width: 20vw;
-    height: 45vh;
+ /* #staticTable {
+    width: 20em;
+    height: 20em;
   }
+} */
 }
-
 @media (max-width: 1079px) {
   #table {
-    font-size: 5vw;
+    font-size: 1.2em;
   }
+}
+  /*
   #staticTable {
   width: 65vw;
   height: 37vh;
 }
-}
+} */
 
 
 #table {
@@ -100,6 +102,7 @@ function rowClick(rowId: String | Number) {
   width: 100%;
   max-width: 100vw;
 }
+
 
 #table td,
 #table th {

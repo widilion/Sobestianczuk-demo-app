@@ -2,9 +2,9 @@
   <header>
     <div class="alignLeft">
       <div class="imageWrapper">
-        <img src="../../assets/bazant-transparent-512px.png" alt="Bażant" />
+        <img src="../../assets/bazant-transparent-512px.png" alt="Bażant" @click="resetPage" />
       </div>
-      <h1>Zadanie Gumiaka</h1>
+      <h1>P. Sobestiańczuk</h1>
     </div>
     <div class="alignRight">
       <div class="searchBar">
@@ -17,7 +17,17 @@
   </header>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useStore } from '../../store/store';
+import { useRouter } from 'vue-router';
+const store = useStore();
+const router = useRouter()
+
+function resetPage(){
+  store.changePage(1);
+  router.push("/")
+}
+</script>
 
 <style scoped>
 header {
@@ -50,6 +60,7 @@ img {
   max-width: 512px; /*actual image width*/
   height: auto; /* maintain aspect ratio*/
   margin: auto; /*optional centering of image*/
+  cursor: pointer;
 }
 
 .imageWrapper {

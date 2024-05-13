@@ -9,6 +9,7 @@ import primeVue from "primevue/config"; //importuje PrimeVue do stylizacji
 import Card from "primevue/card";
 import BaseTable from "./components/ui/BaseTable.vue";
 import BaseModal from "./components/ui/BaseModal.vue";
+import BaseCard from './components/ui/BaseCard.vue'
 import InputText from "primevue/inputtext";
 import SearchInput from "./components/products/SearchInput.vue";
 import BaseButton from "./components/ui/BaseButton.vue";
@@ -25,6 +26,7 @@ app.use(router)
 app.component("card", Card);
 app.component("input-text", InputText);
 app.component("base-table", BaseTable);
+app.component("base-card", BaseCard)
 app.component("base-modal", BaseModal);
 app.component("search-input", SearchInput);
 app.component("base-button", BaseButton);

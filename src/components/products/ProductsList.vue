@@ -1,20 +1,26 @@
 <template>
-  <card>
+  <base-card id="staticCard">
     <template v-if="!isLoading" v-slot:title>List of products:</template>
     <template v-slot:content>
       <div v-if="!isLoading">
-      <base-table
-        :contents="products"
-        colors="true"
-        @clickOnRow="toggleDetails"
-      ></base-table>
-      <pagination></pagination>
-    </div>
-    <div v-if="isLoading" class="loadingSpinner">
-  <progress-spinner strokeWidth="5"></progress-spinner>
-    </div>
+        <base-table
+          :contents="products"
+          colors="true"
+          @clickOnRow="toggleDetails"
+        ></base-table>
+      </div>
+      <!-- this section contains loading spinner when the table is loading -->
+      <div v-if="isLoading" class="loadingSpinner">
+        <progress-spinner strokeWidth="5"></progress-spinner>
+      </div>
     </template>
-  </card>
+    <template v-slot:footer>
+      <div v-if="!isLoading">
+        <pagination></pagination>
+      </div>
+    </template>
+  </base-card>
+  <!-- this section contains modal that is showod at clik on row -->
   <base-modal :show="showModal" @close="toggleDetails">
     <div class="modal">
       <h3>Product Details</h3>
@@ -34,7 +40,7 @@ import Pagination from "./Pagination.vue";
 import { useStore } from "../../store/store.ts";
 import { ref, reactive, defineComponent, computed } from "vue";
 import ProgressSpinner from "primevue/progressspinner";
-defineComponent(["Pagination","ProgressSpinner"]);
+defineComponent(["Pagination", "ProgressSpinner"]);
 const store = useStore();
 
 const products = computed(() => {
@@ -45,7 +51,7 @@ const products = computed(() => {
   }
 });
 
-const isLoading = computed(()=> store.getLoadingState)
+const isLoading = computed(() => store.getLoadingState);
 
 const showModal = ref(false);
 const showProduct = reactive({
@@ -70,12 +76,7 @@ function toggleDetails(id?: String | Number) {
 </script>
 
 <style scoped>
-card {
-  max-width: 100vw;
-}
-
-.loadingSpinner{
-  width: 20vw;
+.loadingSpinner {
   height: 50vh;
   display: flex;
   align-items: center;

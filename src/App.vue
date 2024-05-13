@@ -1,6 +1,6 @@
 <template>
   <the-header></the-header>
-  <div class="content">
+  <div class="pageContent">
     <router-view></router-view>
     <base-modal :show="isError" @close="clearError">
       <h3 class="errMsg">An error occured during request.</h3>
@@ -38,7 +38,7 @@ function clearError() {
 <style>
 @import "./assets/styles.css";
 
-.content {
+.pageContent {
   justify-items: center;
   margin-top: 6em;
   max-width: 100vw;
