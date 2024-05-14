@@ -70,7 +70,6 @@ function resetPage() {
 .appTitle {
   color: antiquewhite;
   padding: 0.1em 0 0 0;
-  font-size: 16px;
   font-size: 2.5vw;
 }
 
@@ -104,11 +103,12 @@ function resetPage() {
 .searchLabel {
   color: antiquewhite;
   padding: 0 0.5em 0 0.5em;
+  font-size: 0.9em;
 }
 
 .searchBar {
   float: right;
-  margin: 0 3vw 0 0;
+  margin: 0 2vw 0 0;
 }
 
 .searchField {

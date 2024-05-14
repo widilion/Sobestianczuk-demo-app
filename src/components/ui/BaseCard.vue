@@ -24,10 +24,10 @@
   gap: 1rem;
   border-radius: 12px;
   /* card size */
-  width: 30vw;
+  width: 28vw;
   height: 45vh;
   min-height: 395px;
-  min-width: 310px;
+  min-width: 255px;
 }
 .card .cardTitle {
   font-size: 1.25rem;
