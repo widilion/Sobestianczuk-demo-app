@@ -1,35 +1,38 @@
+<!-- Base table component -->
 <template>
-  <div id="staticTable">
-    <p v-if="noData">No items found.</p>
-    <table v-else id="table">
-      <tr>
-        <th>{{ columnHeads[0] }}</th>
-        <th>{{ columnHeads[1] }}</th>
-        <th>{{ columnHeads[2] }}</th>
-      </tr>
-      <tr
-        v-if="props.colors"
-        v-for="obj in props.contents"
-        :bgcolor="obj.color"
-        @click="rowClick(obj.id)"
-      >
-        <!-- wersja z kolorowymi tłami  -->
-        <td>{{ obj.id }}</td>
-        <td>{{ obj.name }}</td>
-        <td>{{ obj.year }}</td>
-      </tr>
-      <tr v-else v-for="obj in props.contents">
-        <!-- wersja zwyczajna -->
-        <td v-for="value in Object.values(obj)">{{ value }}</td>
-      </tr>
-    </table>
-  </div>
+  <!-- message if there are no contents -->
+  <p v-if="noData">No items found.</p>
+  <!-- the table -->
+  <table v-else class="baseTable">
+    <tr>
+      <th>{{ columnHeads[0] }}</th>
+      <th>{{ columnHeads[1] }}</th>
+      <th>{{ columnHeads[2] }}</th>
+    </tr>
+    <!-- version with colored backgrounds (if there is "colors" prop)-->
+    <!-- clicking on row emits event with this row ID -->
+    <tr
+      v-if="props.colors"
+      v-for="obj in props.contents"
+      :bgcolor="obj.color"
+      @click="rowClick(obj.id)"
+    >
+      <td>{{ obj.id }}</td>
+      <td>{{ obj.name }}</td>
+      <td>{{ obj.year }}</td>
+    </tr>
+    <!-- version without colored backgrounds as a fallback -->
+    <tr v-else v-for="obj in props.contents">
+      <td v-for="value in Object.values(obj)">{{ value }}</td>
+    </tr>
+  </table>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType } from "vue";
+
+// defining type of contents as an array of objects
 type TableData = {
-  //definiuje typ: array of objects
   id: String;
   name: String;
   year: String;
@@ -37,17 +40,18 @@ type TableData = {
   pantone_value: String;
 }[];
 
+// defining props
 const props = defineProps({
   contents: {
     type: Array as PropType<TableData>,
     default: null,
     required: false,
-  }, //definiuje potrzebny props jako array of objects
+  },
   colors: { type: String, required: false },
 });
 
+// check if any contents passed as a props from parent component, if no then noData is true
 const noData = computed(() => {
-  // Jeśli komponent nie otrzymał danych noData = true
   if (props.contents.length > 0) {
     return false;
   } else {
@@ -55,6 +59,7 @@ const noData = computed(() => {
   }
 });
 
+// taking columns' names from keys in one of content objects, replacing any "_" with spaces
 const columnHeads = computed(() => {
   let keys: String[] =
     props.contents === undefined ? [""] : Object.keys(props.contents[0]);
@@ -65,8 +70,10 @@ const columnHeads = computed(() => {
   return keys;
 });
 
+// defining emits
 const emit = defineEmits(["clickOnRow"]);
 
+// function for emiting row ID on click
 function rowClick(rowId: String | Number) {
   emit("clickOnRow", rowId);
 }
@@ -74,44 +81,31 @@ function rowClick(rowId: String | Number) {
 
 <style scoped>
 @media all and (min-width: 1080px) {
-  #table {
-    font-size: 1.3em 
+  .baseTable {
+    font-size: 1.3em;
   }
- /* #staticTable {
-    width: 20em;
-    height: 20em;
-  }
-} */
 }
 @media (max-width: 1079px) {
-  #table {
+  .baseTable {
     font-size: 1.2em;
   }
 }
-  /*
-  #staticTable {
-  width: 65vw;
-  height: 37vh;
-}
-} */
 
-
-#table {
+.baseTable {
   font-family: inherit;
   border-collapse: collapse;
   width: 100%;
   max-width: 100vw;
 }
 
-
-#table td,
-#table th {
+.baseTable td,
+.baseTable th {
   border-bottom: 1px solid #424242;
   padding: 8px;
   text-align: center;
 }
 
-#table th {
+.baseTable th {
   padding-top: 0px;
   padding-bottom: 5px;
   text-align: center;

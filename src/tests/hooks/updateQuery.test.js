@@ -3,6 +3,7 @@ import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import useUpdateQuery from "../../hooks/updateQuery";
 
+//// setting up mock route with query params ////
 vi.mock("vue-router");
 vi.mocked(useRouter).mockReturnValue({
   replace: vi.fn(),
@@ -11,15 +12,15 @@ vi.mocked(useRoute).mockReturnValue({
   query: { page: "5", id: "3" },
 });
 
-describe("Sprawdzam update query z wewnątrz aplikacji", () => {
-  test("Apka updatuje tylko page", () => {
+describe("Testing updateQuery function", () => {
+  test("Only PAGE update", () => {
     const updateQueryA = useUpdateQuery();
     updateQueryA("2");
 
     expect(useRouter().replace).toHaveBeenCalledWith({ query: { page: "2" } });
   });
 
-  test("Apka updatuje tylko id", () => {
+  test("Only ID update", () => {
     const updateQueryB = useUpdateQuery();
     updateQueryB(undefined, "7");
 
@@ -28,7 +29,7 @@ describe("Sprawdzam update query z wewnątrz aplikacji", () => {
     });
   });
 
-  test("Apka updatuje page i id", () => {
+  test("Updating both PAGE and ID", () => {
     const updateQueryC = useUpdateQuery();
     updateQueryC("15", "23");
 
@@ -37,7 +38,7 @@ describe("Sprawdzam update query z wewnątrz aplikacji", () => {
     });
   });
 
-  test("Apka nie updatuje nic", () => {
+  test("Nothing to update", () => {
     const updateQueryD = useUpdateQuery();
     updateQueryD(undefined, undefined);
 

@@ -6,7 +6,7 @@ import axios from "axios";
 vi.mock("axios");
 
 
-describe("Nie ma takiego id", () => {
+describe("No product with searched ID", () => {
     beforeEach(() => {
       setActivePinia(createPinia());
     });
@@ -17,7 +17,7 @@ describe("Nie ma takiego id", () => {
     };
   axios.get.mockResolvedValue(responseMock)
 
-  test("Zle ID w search"), async()=>{
+  test("Bad search ID"), async()=>{
     const store = useStore();
     await store.updateProducts(undefined, 13)
 

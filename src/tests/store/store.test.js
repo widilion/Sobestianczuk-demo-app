@@ -5,6 +5,7 @@ import axios from "axios";
 
 vi.mock("axios");
 
+//// seting up mock store ////
 describe("Store test", () => {
   beforeEach(() => {
     setActivePinia(createPinia());
@@ -51,7 +52,7 @@ describe("Store test", () => {
     expect(store.getCurrentPage, store.getNumberOfPages).toBe(1, 1);
   });
 
-  test("upadteProducts z page i Id", async () => {
+  test("upadteProducts with PAGE and ID", async () => {
     const store = useStore();
     await store.updateProducts(4, 6);
 
@@ -64,7 +65,7 @@ describe("Store test", () => {
     expect(store.products.length).toBe(1);
   });
 
-  test("updateProducts tylko z page", async () => {
+  test("updateProducts only with PAGE", async () => {
     const store = useStore();
     await store.updateProducts(5);
 
@@ -82,7 +83,7 @@ describe("Store test", () => {
     );
   });
 
-  test("setSearchId z ID", async () => {
+  test("setSearchId with ID", async () => {
     const store = useStore();
     await store.setSearchId(4);
     expect(axios.get).toHaveBeenCalledWith(
@@ -90,7 +91,7 @@ describe("Store test", () => {
     );
   });
 
-  test("setSearchId bez ID", async () => {
+  test("setSearchId without ID", async () => {
     const store = useStore();
     await store.setSearchId("");
     expect(axios.get).toHaveBeenCalledWith(
@@ -101,15 +102,17 @@ describe("Store test", () => {
   test("clearError test", async () => {
     const store = useStore();
     store.errorStatus = true;
-    store.errorInfo = {code: 404, msg: "bad request 404"}
-    store.searchId = "4"
-    store.lastSeenPage = 8
+    store.errorInfo = { code: 404, msg: "bad request 404" };
+    store.searchId = "4";
+    store.lastSeenPage = 8;
 
-    await store.clearError()
+    await store.clearError();
 
-    expect(store.getErrorStatus).toBe(false)
-    expect(store.getErrorInfo).toStrictEqual({})
-    expect(store.getSearchId).toBe("")
-    expect(axios.get).toHaveBeenCalledWith("https://reqres.in/api/products/?per_page=5&page=8")
+    expect(store.getErrorStatus).toBe(false);
+    expect(store.getErrorInfo).toStrictEqual({});
+    expect(store.getSearchId).toBe("");
+    expect(axios.get).toHaveBeenCalledWith(
+      "https://reqres.in/api/products/?per_page=5&page=8"
+    );
   });
 });

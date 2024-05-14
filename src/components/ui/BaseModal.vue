@@ -1,9 +1,12 @@
+<!-- Base modal component -->
 <template>
   <teleport to="body">
-    <div v-if="props.show" @click="emit('close')" class="backdrop"></div>
+    <div v-if="props.show" @click="emit('close')" class="backdrop">
+      <!-- clicking on the backdrop closes the modal -->
+    </div>
     <transition name="dialog">
-      <dialog open v-if="show">
-        <section>
+      <dialog class="dialogBox" open v-if="show">
+        <section class="dialogContent">
           <slot></slot>
         </section>
       </dialog>
@@ -14,8 +17,6 @@
 <script setup lang="ts">
 const props = defineProps({ show: { type: Boolean, required: true } });
 const emit = defineEmits(["close"]);
-
-
 </script>
 
 <style scoped>
@@ -29,14 +30,11 @@ const emit = defineEmits(["close"]);
   z-index: 10;
 }
 
-
-dialog {
+.dialogBox {
   position: fixed;
   top: 40vh;
   left: calc(50% - 10rem);
   width: 20rem;
-  /* left: 50%; */
-  /* width: 30vw; */
   z-index: 100;
   border-radius: 12px;
   border: none;
@@ -45,10 +43,10 @@ dialog {
   margin: 0;
   overflow: hidden;
   background-color: #18181b;
-  color: white
+  color: white;
 }
 
-section {
+.dialogContent {
   padding: 1rem;
 }
 
@@ -71,13 +69,4 @@ section {
 .dialog-leave-active {
   transition: all 0.01s ease-in;
 }
-
-/* @media (min-width: 768px) {
-  dialog {
-    left: calc(50% - 10rem);
-    width: 20rem;
-  }
-} */
-
-
 </style>

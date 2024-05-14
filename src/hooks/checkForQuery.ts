@@ -1,7 +1,9 @@
+//// composable for getting query parameters from route ////
 import { useRoute } from "vue-router";
 export default function useCheckForQuery() {
   const route = useRoute();
 
+  // checkForQuery takes current route and extracts page and ID query params (if any are present)
   function checkForQuery() {
     const query = route.query;
     let queryKeys = Object.keys(query);

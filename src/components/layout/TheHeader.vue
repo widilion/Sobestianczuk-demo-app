@@ -1,16 +1,33 @@
+<!-- The App header component
+Contains: 
+- logo (clickable, takes back to the 1st page)
+- name of the App
+- search field
+-->
+
 <template>
-  <header>
+  <header id="theHeader">
+    <!-- left part of the header -->
     <div class="alignLeft">
       <div class="imageWrapper">
-        <img src="../../assets/bazant-transparent-512px.png" alt="Bażant" @click="resetPage" />
+        <!-- needed to maintain size and ratio of the logo -->
+        <img
+          class="appLogo"
+          src="../../assets/bazant-transparent-512px.png"
+          alt="Bażant"
+          @click="resetPage"
+        />
       </div>
-      <h1>P. Sobestiańczuk</h1>
+      <h1 class="appTitle">P. Sobestiańczuk</h1>
     </div>
+    <!-- right part of the header -->
     <div class="alignRight">
       <div class="searchBar">
-        <label for="search"
-          ><i class="pi pi-search"></i>Filter products' ID:</label
-        >
+        <label class="searchLabel" for="search">
+          <i id="searchIcon" class="pi pi-search"></i>
+          Filter products' ID:
+        </label>
+        <!-- search field -->
         <search-input></search-input>
       </div>
     </div>
@@ -18,19 +35,20 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from '../../store/store';
-import { useRouter } from 'vue-router';
+import { useStore } from "../../store/store";
+import { useRouter } from "vue-router";
 const store = useStore();
-const router = useRouter()
+const router = useRouter();
 
-function resetPage(){
+// function for reseting to the 1st page
+function resetPage() {
   store.changePage(1);
-  router.push("/")
+  router.push("/");
 }
 </script>
 
 <style scoped>
-header {
+#theHeader {
   display: inline-flex;
   width: 100%;
   height: auto;
@@ -44,17 +62,19 @@ header {
   flex-wrap: wrap;
   flex-shrink: 0;
 }
-i {
+
+#searchIcon {
   margin-right: 0.5em;
 }
-h1 {
+
+.appTitle {
   color: antiquewhite;
   padding: 0.1em 0 0 0;
   font-size: 16px;
   font-size: 2.5vw;
 }
 
-img {
+.appLogo {
   display: block;
   width: 100%;
   max-width: 512px; /*actual image width*/
@@ -81,14 +101,9 @@ img {
   align-items: center;
 }
 
-label {
+.searchLabel {
   color: antiquewhite;
   padding: 0 0.5em 0 0.5em;
-}
-
-p {
-  color: white;
-  padding: 1rem;
 }
 
 .searchBar {

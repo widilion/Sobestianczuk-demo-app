@@ -1,3 +1,4 @@
+<!-- Base card component -->
 <template>
   <div class="card">
     <div class="cardTitle">
@@ -22,11 +23,11 @@
   flex-direction: column;
   gap: 1rem;
   border-radius: 12px;
-  /*static card size */
+  /* card size */
   width: 30vw;
-  height: 50vh;
-  min-height: 440px;
-  min-width: 300px;
+  height: 45vh;
+  min-height: 395px;
+  min-width: 310px;
 }
 .card .cardTitle {
   font-size: 1.25rem;

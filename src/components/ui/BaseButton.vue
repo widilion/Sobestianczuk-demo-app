@@ -1,26 +1,18 @@
+<!-- Base button component-->
 <template>
-  <button>
-    <div class="label">
-      <slot></slot>
-    </div>
+  <button class="baseButton">
+    <slot></slot>
   </button>
 </template>
 
 <script setup></script>
 
 <style scoped>
-/* .label {
-
-} */
-
-button {
+.baseButton {
   margin: 0 0px;
   display: inline-flex;
   cursor: pointer;
   user-select: none;
-  /* align-items: center; */
-  /* vertical-align: bottom; */
-  /* text-align: center; */
   margin: 0.2em 1em;
   overflow: hidden;
   position: relative;
@@ -34,17 +26,17 @@ button {
   border-radius: 6px;
   outline-color: transparent;
 }
-button:not(:disabled):hover {
+.baseButton:not(:disabled):hover {
   background: #089939;
   color: #020617;
   border-color: #089939;
 }
-button:not(:disabled):active {
+.baseButton:not(:disabled):active {
   background: #a7f3d0;
   color: #020617;
   border-color: #a7f3d0;
 }
-button:disabled {
+.baseButton:disabled {
   background: #02270e;
   border-color: #034118;
   color: #020617;

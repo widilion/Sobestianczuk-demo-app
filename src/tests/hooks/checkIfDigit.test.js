@@ -3,7 +3,7 @@ import useCheckIfDigit from "../../hooks/checkIfDigit";
 
 const checkIfDigit = useCheckIfDigit();
 
-describe("checkIfDigit test", () => {
+describe("Testing checkIfDigit", () => {
   test("Letter was pressed", () => {
     const eventA = {
       key: "A",

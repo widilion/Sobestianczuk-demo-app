@@ -1,19 +1,27 @@
+/* Main Pinia store configuration */
+
 import { defineStore } from "pinia";
 import axios from "axios";
 
 export const useStore = defineStore("main", {
+  //////////////////////////
+  //// state of the app ////
+  //////////////////////////
   state() {
     return {
-      searchId: "",
-      currentPage: 1,
-      numberOfPages: 1,
-      lastSeenPage: 1,
-      products: [{}],
-      errorStatus: false,
-      errorInfo: {},
-      isLoading: false
+      searchId: "", // ID of searched product
+      currentPage: 1, // current shown page
+      numberOfPages: 1, // total number of products pages
+      lastSeenPage: 1, // page last seen before search
+      products: [{}], // array of all products requested from API
+      errorStatus: false, // status of request - true if request failed and error occured
+      errorInfo: {}, // object to which error code and message are saved in case of request error
+      isLoading: false, // flag of ongoing request, needed to show loading spinner
     };
   },
+  ////////////////////////////
+  //// respectful getters ////
+  ////////////////////////////
   getters: {
     getSearchId(state) {
       return state.searchId;
@@ -24,8 +32,8 @@ export const useStore = defineStore("main", {
     getCurrentPage(state) {
       return state.currentPage;
     },
-    getNumberOfPages(state){
-      return state.numberOfPages
+    getNumberOfPages(state) {
+      return state.numberOfPages;
     },
     getErrorInfo(state) {
       return state.errorInfo;
@@ -36,20 +44,15 @@ export const useStore = defineStore("main", {
     getLastSeenPage(state) {
       return state.lastSeenPage;
     },
-    getLoadingState(state){
+    getLoadingState(state) {
       return state.isLoading;
-    }
-  },
-  actions: {
-    //// czyszczenie stanu wyszukiwania po błedzie z serwera ////
-    async clearError() {
-      this.errorStatus = false;
-      this.errorInfo = {};
-      this.searchId = "";
-      await this.updateProducts(this.lastSeenPage);
     },
-
-    //// wyszukiwanie produktu po id na serwerze ////
+  },
+  ///////////////////////
+  //// store actions ////
+  ///////////////////////
+  actions: {
+    //// searching product on the API by product ID ////
     async setSearchId(id: any) {
       this.searchId = id;
       if (id || id === "") {
@@ -57,85 +60,94 @@ export const useStore = defineStore("main", {
       }
     },
 
-    //// zmiana strony na next lub previous
+    //// changing shown page to next or previous ////
     async changePage(newPage: number) {
       await this.updateProducts(newPage);
     },
 
-    //// zapamietywanie ostatnio ogladanej strony ////
+    //// storing last seen page to revert after bad request or search ////
     setLastPage() {
       this.lastSeenPage = this.currentPage;
     },
 
-    //// funkcja ktora wylacza dzialanie paginacji
+    //// blocking pagination component after search by ID ////
     blockPagination() {
       this.currentPage = 1;
       this.numberOfPages = 1;
     },
 
-    //// wysylanie zapytania do serwera o produkty na stronie albo o danym id ////
+    //// clearing app state after dissmisng request error ////
+    async clearError() {
+      this.errorStatus = false;
+      this.errorInfo = {};
+      this.searchId = "";
+      await this.updateProducts(this.lastSeenPage);
+    },
+
+    //// requesting products from API by page or ID////
     async updateProducts(page?: number | string, id?: string | number) {
-      // rozpoczynam wyswietlenie loadingu
+      // setting loading state and showing loading spinner
       this.isLoading = true;
-      // tworze zmienne na odpowiedz serwera i na fragmenty URL
+      // vars for request elements
       let response;
       let linkPage = "";
       let linkId = "";
-      // zeruje bledy z poprzednich zapytań jeśli jakieś były
+      // clearing errors from past requests
       this.errorStatus = false;
       this.errorInfo = {};
 
       if (!!page) {
-        // sprawdzam czy pytam o strone
-        linkPage = `&page=${page}`; // jesli tak dodaje strone do query param
+        // checking if there is a page request
+        linkPage = `&page=${page}`; // if so, adding page to query params
       } else {
-        linkPage = `&page=${this.currentPage}`; // jesli nie, zostawaiam w adresie aktualna strone
+        linkPage = `&page=${this.currentPage}`; // if no leaving current page in the URL
       }
       if (!!id) {
-        //sprawdzam czy pytam o id
-        linkId = `&id=${id}`; // jesli tak to dodaje id do query param
+        // checking if there is an ID request
+        linkId = `&id=${id}`; // if so, adding it to query params
       }
-      // tworze URL do zapytania API
+      // constructing request URL
       const url =
         "https://reqres.in/api/products/?per_page=5" + linkPage + linkId;
 
-      // wysylam zapytanie
+      // sending request to API
       try {
         response = await axios.get(url);
       } catch (error: any) {
-        // w przypadku bledu tworze sobie obiekt z kodem i wiadomoscią
+        // creating error object in case of bad response
         const err = {
           code: error.response.status,
           msg: error.message,
         };
 
         if (err.code === 404) {
-          // blad 404 oznacza ze nie bylo takiego id produktu
-          this.blockPagination(); // wylaczam paginacje
-          this.products = []; // nie ma produktow
+          // 404 code - searched ID not in base
+          this.blockPagination(); // turning off pagination controls
+          this.products = [];
         } else {
-          // inny kod bledu odpala modal z informacja o bledzie
+          // error codes different than 404 - the error object is set
           this.errorStatus = true;
           this.errorInfo = err;
         }
+        // end of loading
         this.isLoading = false;
         return;
       }
-      // jesli odpowiedz wrocila i nie ma zadnego bledu
+      // request turned out OK
       if (response.status === 200) {
         if (!!id) {
-          // znalazlem tylko jeden produkt
-          this.blockPagination(); // wylaczam paginacje
-          this.products = [response.data.data]; // odpowiedz to obiekt z jednym produktem ale BaseTable oczekuje array of objects
+          // if ID was in the query - there should be only one product returned
+          this.blockPagination(); // so the pagination controls are turned off
+          this.products = [response.data.data]; // needed beacuse BaseTable.vue accepts only array of objects
         } else {
-          // zmienilem na inna strone
+          // the request was for page change
           this.currentPage = response.data.page;
           this.numberOfPages = response.data.total_pages;
           this.products = response.data.data;
-          this.setLastPage();  // ustawiam obecną strone jako ostatnio ogladana
+          this.setLastPage(); // saving current page as last seen
         }
       }
-      // kończę loading
+      // end of loading
       this.isLoading = false;
       return;
     },
